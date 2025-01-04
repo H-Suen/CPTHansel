@@ -18,6 +18,7 @@ public class hanselCPT{
 		// creating variables for the the bet and balance
 		int intBet = 0;
 		int intBalance = 1000;
+		String strName = "";
 		// creating variables for shuffling
 		int intRow;
 		int intRow2;
@@ -47,7 +48,7 @@ public class hanselCPT{
 			// main menu
 			while (strScreen.equals("menu")){
 				con.clear();
-				con.println("welcome to Blackjack!");
+				con.println("Welcome to Blackjack!");
 				con.println("What would you like to do?");
 				con.println("Play | Recent | Quit | Help");
 				// get the action
@@ -59,7 +60,7 @@ public class hanselCPT{
 					strScreen = "table";
 				}
 				// Recent - read and print scores from winners.txt
-				else if (chrAction == 'r'){
+				else if (chrAction == 'v'){
 					con.clear();
 					// read winners.txt and output it
 					TextInputFile scores = new TextInputFile("winners.txt");
@@ -94,21 +95,34 @@ public class hanselCPT{
 					con.println("If the dealer bust, you WIN!");
 					con.println("If neither you nor the dealer busts, the person with the highest hand wins");
 					con.println("");
-					con.println("Play | Main menu");
+					con.println("Main menu");
 					strAction = con.readLine();
+				}
+				else if (chrAction == 's'){
+					con.println("Which company NEVER loses at blackjack?");
+					con.sleep(500);
+					con.print(". ");
+					con.sleep(500);
+					con.print(". ");
+					con.sleep(500);
+					con.println(". ");
+					con.println("Forever 21");
+					con.println("Return to main menu");
+					strAction = con.readLine();
+					
 				}
 			}
 			
 			// Table screen
 			while (strScreen.equals("table")){
-				// resseting the player and dealer total
-				intDeck = new int[52][3];
-				intDealer = new int[5][2];
-				intPlayer = new int[5][2];
+				// resetting the player and dealer total
 				intPTotal = 0;
 				intDTotal = 0;
+				intSuit = 0;
 				con.clear();
-				con.println("How much would you like to bet?  (TABLE SCREEN)");
+				con.print("Enter your name: ");
+				strName = con.readLine();
+				con.println("How much would you like to bet? ");
 				con.println("Current Balance: " + intBalance);
 				intBet = con.readInt();
 				if (intBet <= 0){
@@ -172,10 +186,12 @@ public class hanselCPT{
 								intPTotal -= 10;
 							}
 						}
-
+						// counting how many cards have been drawn
 						intCardCount++;
+						// sending the cards to the method to convert the numbers to text
 						intReturn = CPTtools.phand(intPlayer[intCount][0], intPlayer[intCount][1]);
 					}
+					// displaying text from the player's hand text file
 					TextInputFile P1Hand = new TextInputFile("PlayHand.txt");
 					while(P1Hand.eof() == false){
 						strPlayerHand = P1Hand.readLine();
@@ -196,7 +212,21 @@ public class hanselCPT{
 						intDealer[intCount][1] = intDeck[intCardCount][1];						
 						intCardCount++;
 						intReturn = CPTtools.dhand(intDealer[intCount][0], intDealer[intCount][1]);
+						// adjusting the deck numbers into values for blackjack
+						if (intDealer[intCount][0] >= 2 && intDealer[intCount][0] <= 10){
+							intDTotal += intDealer[intCount][0];
+						}
+						else if (intDealer[intCount][0] > 10){
+							intDTotal += 10;
+						}
+						else if (intDealer[intCount][0] == 1){
+							intDTotal += 11;
+							if (intDTotal >= 21){
+								intDTotal -= 10;
+							}
+						}
 					}
+					// reading DealHand.txt and printing it out 
 					TextInputFile DHand = new TextInputFile("DealHand.txt");
 					strDealerHand = DHand.readLine();
 					con.println(strDealerHand);
@@ -214,7 +244,7 @@ public class hanselCPT{
 					else{
 						con.print("Would you like to: ");
 						
-						if(intPlayer[0][0] + intPlayer[1][0] <= 11 && intPlayer[0][0] + intPlayer[1][0] >= 9){
+						if(intPTotal <= 11 && intPTotal >= 9){
 							con.print("Double Down, ");
 						}
 						con.println("Stand, or Hit");
@@ -233,6 +263,7 @@ public class hanselCPT{
 					}
 				}	
 			}
+			// double down screen
 			while (strScreen.equalsIgnoreCase("double down")){
 				con.clear();
 				// displaying player's hand
@@ -267,6 +298,8 @@ public class hanselCPT{
 				P1Hand.close();
 				strScreen = "dealer";
 			}
+			
+			// hit screen (gives them another card)
 			while (strScreen.equalsIgnoreCase("hit")){
 				con.clear();
 				intCount = 2;
@@ -311,6 +344,19 @@ public class hanselCPT{
 					intDealer[intCount][1] = intDeck[intCardCount][1];						
 					intCardCount++;
 					intReturn = CPTtools.dhand(intDealer[intCount][0], intDealer[intCount][1]);
+					// adjusting the deck numbers into values for blackjack
+					if (intDealer[intCount][0] >= 2 && intDealer[intCount][0] <= 10){
+						intDTotal += intDealer[intCount][0];
+					}
+					else if (intDealer[intCount][0] > 10){
+						intDTotal += 10;
+					}
+					else if (intDealer[intCount][0] == 1){
+						intDTotal += 11;
+						if (intDTotal >= 21){
+							intDTotal -= 10;
+						}
+					}
 				}
 				TextInputFile DHand = new TextInputFile("DealHand.txt");
 				strDealerHand = DHand.readLine();
@@ -332,6 +378,8 @@ public class hanselCPT{
 					}
 				}
 			}
+			
+			// when its the dealer turn
 			while (strScreen.equalsIgnoreCase("dealer")){
 				con.clear();
 				// displaying the player's cards
@@ -354,50 +402,96 @@ public class hanselCPT{
 				}
 				
 				if (intDTotal <= 16){
-					for (intCount = 2; intCount < 5; intCount++){
+					intCount = 2;
+					while (intDTotal <= 16){
 						intDealer[intCount][0] = intDeck[intCardCount][0];
 						intDealer[intCount][1] = intDeck[intCardCount][1];
 						intCardCount++;
 						intReturn = CPTtools.dhand(intDealer[intCount][0], intDealer[intCount][1]);
+						// adjusting the deck numbers into values for blackjack
+						if (intDealer[intCount][0] >= 2 && intDealer[intCount][0] <= 10){
+							intDTotal += intDealer[intCount][0];
+						}
+						else if (intDealer[intCount][0] > 10){
+							intDTotal += 10;
+						}
+						else if (intDealer[intCount][0] == 1){
+							intDTotal += 11;    
+							if (intDTotal >= 21){
+								intDTotal -= 10;
+							}
+						}
+						System.out.println(intDTotal);
 					}
 				}
 				else if (intDTotal > 16 && intDTotal <= 21){ 
 					if (intDTotal > intPTotal){
+						con.println("");
 						con.println("The dealer won");
-						con.println("Better luck next time1");
+						con.println("Better luck next time!");
+						con.println("");
 						strScreen = "end";
 					}
 					else if (intDTotal < intPTotal){
+						con.println("");
 						con.println("You won!");
+						con.println("");
 						intBalance += intBet * 2;
 						strScreen = "end";
 					}
 					else if (intDTotal == intPTotal){
+						con.println();
 						con.println("You and the dealer tied!");
 						con.println("You get you money back");
+						con.println("");
 						intBalance += intBet;
 						strScreen = "end";
 					}
 				}
 				else if (intDTotal > 21){
+					con.println();
 					con.println("The dealer busted!");
 					con.println("You won!");
 					intBalance += intBet * 2;
 					strScreen = "end";
 				}
 			}
+			
+			// when both the player and the dealer have finished drawing cards
 			while (strScreen.equalsIgnoreCase("end")){
 				con.println("Current balance: " + intBalance);
 				if (intBalance <= 0){
 					con.println("You have run out of money");
 					con.println("Return to main menu");
 					strAction = con.readLine();
+					if (strAction.equals("statitans")){
+						con.clear();
+						con.println("You gained an extra $1000");
+						intBalance += 1000;
+						con.sleep(1000);
+						break;
+					}
+					TextOutputFile loser = new TextOutputFile("winners.txt");
+					loser.println(strName);
+					loser.println(intBalance);
+					loser.close();
+					strScreen = "menu";
 				}
 				else {
 					con.println("What would you like to do?");
 					con.println("Return to main menu | Play again");
 					strAction = con.readLine();
+					if (strAction.equals("statitans")){
+						con.clear();
+						con.println("You gained an extra $1000");
+						intBalance += 1000;
+						con.sleep(1000);
+					}
 					if (strAction.equalsIgnoreCase("main menu")){
+						TextOutputFile winner = new TextOutputFile("winners.txt");
+						winner.println(strName);
+						winner.println(intBalance);
+						winner.close();
 						strScreen = "menu";
 					}
 					else{
