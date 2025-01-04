@@ -1,9 +1,9 @@
 import arc.*;
+import java.awt.image.BufferedImage;
 
 public class hanselCPT{
 	public static void main(String[] args){
-		Console con = new Console();
-		
+		Console con = new Console("BlackJack", 1280, 720);
 		// creating variables and arrays
 		int intCount;
 		// creating arrays for player, dealer and deck
@@ -43,7 +43,14 @@ public class hanselCPT{
 		String strPlayerHand;
 		String strDealerHand;
 		int intReturn;
+		// cereatng variables to draw an image
+		int intX;
+		int intY;
+		int intXVel = 3;
+		int intYVel = 3;
 		
+		
+		// while loop to constantly run this program
 		while(true){
 			// main menu
 			while (strScreen.equals("menu")){
@@ -52,8 +59,7 @@ public class hanselCPT{
 				con.println("What would you like to do?");
 				con.println("Play | Recent | Quit | Help");
 				// get the action
-				strAction = con.readLine();
-				chrAction = strAction.charAt(0);
+				chrAction = con.getChar();
 				// Play - go to the table screen
 				if (chrAction == 'p'){
 					con.clear();
@@ -70,12 +76,12 @@ public class hanselCPT{
 					}
 					// get input to navigate to the menu or table
 					con.println("Play | Menu");
-					strAction = con.readLine();
+					chrAction = con.getChar();
 				}
 				// Quit - Go to dvd screen
 				else if (chrAction == 'q'){
 					con.clear();
-					strScreen = "DVD";
+					strScreen = "quit";
 				}
 				// Help - Print out rules of the game
 				else if (chrAction == 'h'){
@@ -96,7 +102,7 @@ public class hanselCPT{
 					con.println("If neither you nor the dealer busts, the person with the highest hand wins");
 					con.println("");
 					con.println("Main menu");
-					strAction = con.readLine();
+					chrAction = con.getChar();
 				}
 				else if (chrAction == 's'){
 					con.println("Which company NEVER loses at blackjack?");
@@ -108,9 +114,13 @@ public class hanselCPT{
 					con.println(". ");
 					con.println("Forever 21");
 					con.println("Return to main menu");
-					strAction = con.readLine();
-					
+					chrAction = con.getChar();					
 				}
+			}
+			
+			// Quit screen
+			while (strScreen.equalsIgnoreCase("quit")){
+				System.exit(0); 
 			}
 			
 			// Table screen
@@ -248,8 +258,7 @@ public class hanselCPT{
 							con.print("Double Down, ");
 						}
 						con.println("Stand, or Hit");
-						strAction = con.readLine();
-						chrAction = strAction.charAt(0);
+						chrAction = con.getChar();
 						if (chrAction == 's'){
 							strScreen = "dealer";
 						}
@@ -371,8 +380,7 @@ public class hanselCPT{
 				}
 				else{
 					con.println("Would you like to Hit or Stand?");
-					strAction = con.readLine();
-					chrAction = strAction.charAt(0);
+					chrAction = con.getChar();
 					if (chrAction == 's'){
 						strScreen = "dealer";
 					}
@@ -471,7 +479,7 @@ public class hanselCPT{
 						con.sleep(1000);
 						break;
 					}
-					TextOutputFile loser = new TextOutputFile("winners.txt");
+					TextOutputFile loser = new TextOutputFile("winners.txt", true);
 					loser.println(strName);
 					loser.println(intBalance);
 					loser.close();
@@ -488,7 +496,7 @@ public class hanselCPT{
 						con.sleep(1000);
 					}
 					if (strAction.equalsIgnoreCase("main menu")){
-						TextOutputFile winner = new TextOutputFile("winners.txt");
+						TextOutputFile winner = new TextOutputFile("winners.txt", true);
 						winner.println(strName);
 						winner.println(intBalance);
 						winner.close();
