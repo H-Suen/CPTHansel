@@ -1,5 +1,6 @@
 import arc.*;
-import java.awt.image.BufferedImage;
+import java.awt.*;
+import java.awt.image.*;
 
 public class hanselCPT{
 	public static void main(String[] args){
@@ -44,11 +45,11 @@ public class hanselCPT{
 		String strDealerHand;
 		int intReturn;
 		// cereatng variables to draw an image
-		int intX;
-		int intY;
-		int intXVel = 3;
-		int intYVel = 3;
-		
+		int intX = 0;
+		int intY = 0;
+		int intXVel = 2;
+		int intYVel = 2;
+		BufferedImage imgDVD = con.loadImage("DVD.png");
 		
 		// while loop to constantly run this program
 		while(true){
@@ -120,7 +121,18 @@ public class hanselCPT{
 			
 			// Quit screen
 			while (strScreen.equalsIgnoreCase("quit")){
-				System.exit(0); 
+				// con.closeConsole();
+				con.drawImage(imgDVD, intX, intY);
+				intX += intXVel;
+				intY += intYVel;
+				if (intX >= 1025 || intX <= 0){
+					intXVel *= -1;
+				}
+				if (intY >= 465 || intY <= 0){
+					intYVel *= -1;
+				}
+				con.repaint();
+				con.sleep(10);
 			}
 			
 			// Table screen
