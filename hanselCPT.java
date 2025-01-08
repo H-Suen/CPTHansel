@@ -17,6 +17,7 @@ public class hanselCPT{
 		int intPTotal = 0;
 		int intDTotal = 0;
 		// creating variables for the the bet and balance
+		boolean blnName = false;
 		int intBet = 0;
 		int intBalance = 1000;
 		String strName = "";
@@ -64,6 +65,8 @@ public class hanselCPT{
 				// Play - go to the table screen
 				if (chrAction == 'p'){
 					con.clear();
+					blnName = false;
+					intBalance = 1000;
 					strScreen = "table";
 				}
 				// Recent - read and print scores from winners.txt
@@ -105,6 +108,7 @@ public class hanselCPT{
 					con.println("Main menu");
 					chrAction = con.getChar();
 				}
+				// secret menu that prints a joke
 				else if (chrAction == 's'){
 					con.println("Which company NEVER loses at blackjack?");
 					con.sleep(500);
@@ -141,9 +145,13 @@ public class hanselCPT{
 				intPTotal = 0;
 				intDTotal = 0;
 				intSuit = 0;
+				intCardCount = 0;
 				con.clear();
-				con.print("Enter your name: ");
-				strName = con.readLine();
+				if (blnName == false){
+					con.print("Enter your name: ");
+					strName = con.readLine();
+					blnName = true;
+				}
 				con.println("How much would you like to bet? ");
 				con.println("Current Balance: " + intBalance);
 				intBet = con.readInt();
@@ -173,12 +181,15 @@ public class hanselCPT{
 					for (intRow = 0; intRow < 51; intRow++){
 						for (intRow2 = 0; intRow2 < 51 - intRow; intRow2++){
 							if (intDeck[intRow2][2] > intDeck[intRow2+1][2]){
+								// assigning the first variable to a temp variable
 								intTempNum = intDeck[intRow2][0];
 								intTempSuit = intDeck[intRow2][1];
 								intTempRand = intDeck[intRow2][2];
+								// making the first variable equal the second variable 
 								intDeck[intRow2][0] = intDeck[intRow2+1][0];
 								intDeck[intRow2][1] = intDeck[intRow2+1][1];
 								intDeck[intRow2][2] = intDeck[intRow2+1][2];
+								// making the second variable equal the temp variable
 								intDeck[intRow2+1][0] = intTempNum;
 								intDeck[intRow2+1][1] = intTempSuit;
 								intDeck[intRow2+1][2] = intTempRand;
