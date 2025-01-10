@@ -127,18 +127,21 @@ public class hanselCPT{
 			
 			// Quit screen
 			while (strScreen.equalsIgnoreCase("quit")){
-				// con.closeConsole();
+				// draw the image to the console
 				con.drawImage(imgDVD, intX, intY);
+				// change its location every iteration of the while loop
 				intX += intXVel;
 				intY += intYVel;
+				// if it exceeds the border turn it back
 				if (intX >= 1025 || intX <= 0){
 					intXVel *= -1;
 				}
 				if (intY >= 465 || intY <= 0){
 					intYVel *= -1;
 				}
-				con.clear();
+				// repaint the image
 				con.repaint();
+				// set a delay to make it enjoyable to see
 				con.sleep(10);
 			}
 			
@@ -291,7 +294,7 @@ public class hanselCPT{
 					// getting player action
 					else{
 						con.print("Would you like to: ");
-						
+						// if they have the correct total they can double down 
 						if(intPTotal <= 11 && intPTotal >= 9){
 							con.print("Double Down, ");
 						}
