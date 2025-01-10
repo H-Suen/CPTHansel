@@ -110,13 +110,15 @@ public class hanselCPT{
 				}
 				// secret menu that prints a joke
 				else if (chrAction == 's'){
+					con.clear();
 					con.println("Which company NEVER loses at blackjack?");
-					con.sleep(500);
+					con.sleep(1000);
 					con.print(". ");
-					con.sleep(500);
+					con.sleep(1000);
 					con.print(". ");
-					con.sleep(500);
+					con.sleep(1000);
 					con.println(". ");
+					con.sleep(1000);
 					con.println("Forever 21");
 					con.println("Return to main menu");
 					chrAction = con.getChar();					
@@ -135,6 +137,7 @@ public class hanselCPT{
 				if (intY >= 465 || intY <= 0){
 					intYVel *= -1;
 				}
+				con.clear();
 				con.repaint();
 				con.sleep(10);
 			}
@@ -147,14 +150,25 @@ public class hanselCPT{
 				intSuit = 0;
 				intCardCount = 0;
 				con.clear();
-				if (blnName == false){
+				// asking for their name once
+				while (blnName == false){
 					con.print("Enter your name: ");
 					strName = con.readLine();
-					blnName = true;
+					if (strName.equals("statitans")){
+						con.clear();
+						con.println("You gained an extra $1000");
+						intBalance += 1000;
+						con.sleep(1000);
+					}
+					else{
+						blnName = true;
+					}
 				}
+				// asking for their bet
 				con.println("How much would you like to bet? ");
 				con.println("Current Balance: " + intBalance);
 				intBet = con.readInt();
+				// failsafes for an invalid bet
 				if (intBet <= 0){
 					con.println("Your bet cannot be negative");
 				}
@@ -162,6 +176,7 @@ public class hanselCPT{
 					con.clear();
 					con.println("Your bet should be lower than your balance");
 				}
+				// if the bet is the correct amount shuffle the deck
 				else if (intBalance >= intBet && intBet > 0){
 					// Removing the bet amount from balance
 					intBalance -= intBet; 
@@ -328,6 +343,7 @@ public class hanselCPT{
 					con.println(strPlayerHand);
 				}
 				P1Hand.close();
+				// changing screen to dealer
 				strScreen = "dealer";
 			}
 			
@@ -367,39 +383,18 @@ public class hanselCPT{
 				// displaying dealers's hand
 				con.println("");
 				con.println("Dealer's hand");
-				// clearing the dealers's hand
-				TextOutputFile DealingHand = new TextOutputFile("DealHand.txt");
-				DealingHand.close();
-				// dealing the dealer the first cards
-				for (intCount = 0; intCount < 2; intCount++){
-					intDealer[intCount][0] = intDeck[intCardCount][0];
-					intDealer[intCount][1] = intDeck[intCardCount][1];						
-					intCardCount++;
-					intReturn = CPTtools.dhand(intDealer[intCount][0], intDealer[intCount][1]);
-					// adjusting the deck numbers into values for blackjack
-					if (intDealer[intCount][0] >= 2 && intDealer[intCount][0] <= 10){
-						intDTotal += intDealer[intCount][0];
-					}
-					else if (intDealer[intCount][0] > 10){
-						intDTotal += 10;
-					}
-					else if (intDealer[intCount][0] == 1){
-						intDTotal += 11;
-						if (intDTotal >= 21){
-							intDTotal -= 10;
-						}
-					}
-				}
 				TextInputFile DHand = new TextInputFile("DealHand.txt");
 				strDealerHand = DHand.readLine();
 				con.println(strDealerHand);
-				DHand.close();					
-				
+				DHand.close();		
 				con.println("");
 
 				if (intPTotal > 21){
 					con.println("You busted!");
 					strScreen = "end";
+				}
+				else if (intPTotal == 21){
+					strScreen = "dealer";
 				}
 				else{
 					con.println("Would you like to Hit or Stand?");
@@ -490,43 +485,34 @@ public class hanselCPT{
 			
 			// when both the player and the dealer have finished drawing cards
 			while (strScreen.equalsIgnoreCase("end")){
+				// displaying their current balance
 				con.println("Current balance: " + intBalance);
+				// if they run out of money
 				if (intBalance <= 0){
 					con.println("You have run out of money");
 					con.println("Return to main menu");
 					strAction = con.readLine();
-					if (strAction.equals("statitans")){
-						con.clear();
-						con.println("You gained an extra $1000");
-						intBalance += 1000;
-						con.sleep(1000);
-						break;
-					}
+					// write their names in winners.txt
 					TextOutputFile loser = new TextOutputFile("winners.txt", true);
 					loser.println(strName);
 					loser.println(intBalance);
 					loser.close();
+					// sending them to menu screen
 					strScreen = "menu";
 				}
 				else {
 					con.println("What would you like to do?");
 					con.println("Return to main menu | Play again");
-					strAction = con.readLine();
-					if (strAction.equals("statitans")){
-						con.clear();
-						con.println("You gained an extra $1000");
-						intBalance += 1000;
-						con.sleep(1000);
+					chrAction = con.getChar();
+					if (chrAction == '0'){
+						strScreen = "table";
 					}
-					if (strAction.equalsIgnoreCase("main menu")){
+					else{
 						TextOutputFile winner = new TextOutputFile("winners.txt", true);
 						winner.println(strName);
 						winner.println(intBalance);
 						winner.close();
 						strScreen = "menu";
-					}
-					else{
-						strScreen = "table";
 					}
 				}
 			}
