@@ -25,12 +25,10 @@ public class hanselCPT{
 		int intRow;
 		int intRow2;
 		int intRand;
-		int intTempNum;
-		int intTempSuit;
-		int intTempRand;
+		int intTempCard[];
 		int intPlayerCard;
 		int intDealerCard;
-		// creeating variables for translating numbers to cards
+		// creating variables for translating numbers to cards
 		int intSuit = 0;
 		int intNum;
 		// creating a variable for card count
@@ -59,7 +57,7 @@ public class hanselCPT{
 				con.clear();
 				con.println("Welcome to Blackjack!");
 				con.println("What would you like to do?");
-				con.println("Play | Recent | Quit | Help");
+				con.println("(p)lay | (v)iew Recents | (q)uit | (h)elp");
 				// get the action
 				chrAction = con.getChar();
 				// Play - go to the table screen
@@ -157,6 +155,7 @@ public class hanselCPT{
 				while (blnName == false){
 					con.print("Enter your name: ");
 					strName = con.readLine();
+					// if they input the secret password
 					if (strName.equals("statitans")){
 						con.clear();
 						con.println("You gained an extra $1000");
@@ -200,17 +199,11 @@ public class hanselCPT{
 						for (intRow2 = 0; intRow2 < 51 - intRow; intRow2++){
 							if (intDeck[intRow2][2] > intDeck[intRow2+1][2]){
 								// assigning the first variable to a temp variable
-								intTempNum = intDeck[intRow2][0];
-								intTempSuit = intDeck[intRow2][1];
-								intTempRand = intDeck[intRow2][2];
+								intTempCard = intDeck[intRow2];
 								// making the first variable equal the second variable 
-								intDeck[intRow2][0] = intDeck[intRow2+1][0];
-								intDeck[intRow2][1] = intDeck[intRow2+1][1];
-								intDeck[intRow2][2] = intDeck[intRow2+1][2];
+								intDeck[intRow2] = intDeck[intRow2+1];
 								// making the second variable equal the temp variable
-								intDeck[intRow2+1][0] = intTempNum;
-								intDeck[intRow2+1][1] = intTempSuit;
-								intDeck[intRow2+1][2] = intTempRand;
+								intDeck[intRow2+1] = intTempCard;
 							}
 						}
 					}
@@ -298,11 +291,14 @@ public class hanselCPT{
 						if(intPTotal <= 11 && intPTotal >= 9){
 							con.print("Double Down, ");
 						}
+						// if they want to stand or hit
 						con.println("Stand, or Hit");
 						chrAction = con.getChar();
+						// set the screen to dealer if they stand
 						if (chrAction == 's'){
 							strScreen = "dealer";
 						}
+						
 						else if (chrAction == 'd'){
 							strScreen = "double down";
 							
