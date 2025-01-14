@@ -76,6 +76,7 @@ public class hanselCPT{
 						strScore = scores.readLine();
 						con.println(strScore);
 					}
+					scores.close();
 					// get input to navigate to the menu or table
 					con.println("Play | Menu");
 					chrAction = con.getChar();
@@ -158,11 +159,17 @@ public class hanselCPT{
 					// if they input the secret password
 					if (strName.equals("statitans")){
 						con.clear();
+						// give them an extra 1000 money
 						con.println("You gained an extra $1000");
 						intBalance += 1000;
 						con.sleep(1000);
 					}
+					else if (strName.equals("")){
+						// if they enter a blank name it breaks the leaderboard code
+						con.println("Invalid name");
+					}
 					else{
+						// make sure that they only need to enter name once per time they play
 						blnName = true;
 					}
 				}
@@ -298,11 +305,12 @@ public class hanselCPT{
 						if (chrAction == 's'){
 							strScreen = "dealer";
 						}
-						
+						// set the screen to double down
 						else if (chrAction == 'd'){
 							strScreen = "double down";
 							
 						}
+						// else give them a card
 						else{
 						strScreen = "hit";	
 						}
@@ -365,8 +373,9 @@ public class hanselCPT{
 						intPTotal -= 10;
 					}
 				}
-
+				// counting the amount of cards dealt
 				intCardCount++;
+				// sending the hand to the method to convert it to user friendly text
 				intReturn = CPTtools.phand(intPlayer[intCount][0], intPlayer[intCount][1]);
 				
 				// displaying player's hand
@@ -387,7 +396,7 @@ public class hanselCPT{
 				con.println(strDealerHand);
 				DHand.close();		
 				con.println("");
-
+				// telling user if they busted, got 21 or they want to hit again
 				if (intPTotal > 21){
 					con.println("You busted!");
 					strScreen = "end";
@@ -425,7 +434,8 @@ public class hanselCPT{
 					strDealerHand = DHand.readLine();
 					con.println(strDealerHand);
 				}
-				
+				DHand.close();
+				// giving dealer cards until they go over 16
 				if (intDTotal <= 16){
 					intCount = 2;
 					while (intDTotal <= 16){
@@ -446,10 +456,11 @@ public class hanselCPT{
 								intDTotal -= 10;
 							}
 						}
-						System.out.println(intDTotal);
 					}
 				}
+				// if the dealer is higher than 16 and hasn't busted
 				else if (intDTotal > 16 && intDTotal <= 21){ 
+					// if the dealer's hand is greater than the player
 					if (intDTotal > intPTotal){
 						con.println("");
 						con.println("The dealer won");
@@ -457,22 +468,27 @@ public class hanselCPT{
 						con.println("");
 						strScreen = "end";
 					}
+					// if the player's hand is greater than the dealer's hand
 					else if (intDTotal < intPTotal){
 						con.println("");
 						con.println("You won!");
 						con.println("");
+						// giving the player gained money
 						intBalance += intBet * 2;
 						strScreen = "end";
 					}
+					// if the plaer and the dealer's hand tie
 					else if (intDTotal == intPTotal){
 						con.println();
 						con.println("You and the dealer tied!");
 						con.println("You get you money back");
 						con.println("");
+						// giving back the money they bet
 						intBalance += intBet;
 						strScreen = "end";
 					}
 				}
+				// if the dealer busted
 				else if (intDTotal > 21){
 					con.println();
 					con.println("The dealer busted!");
@@ -499,18 +515,23 @@ public class hanselCPT{
 					// sending them to menu screen
 					strScreen = "menu";
 				}
-				else {
+				// asking them what to do
+				else{
 					con.println("What would you like to do?");
-					con.println("Return to main menu | Play again");
+					con.println("(r)eturn to main menu | (p)lay again");
 					chrAction = con.getChar();
-					if (chrAction == '0'){
+					// if they want to play agian
+					if (chrAction == 'p'){
 						strScreen = "table";
 					}
+					// if they want to go to the main menu
 					else{
+						// write their balance and name to the winners.txt
 						TextOutputFile winner = new TextOutputFile("winners.txt", true);
 						winner.println(strName);
 						winner.println(intBalance);
 						winner.close();
+						// send the user back to menu
 						strScreen = "menu";
 					}
 				}
