@@ -6,7 +6,7 @@ public class hanselCPT{
 	public static void main(String[] args){
 		Console con = new Console("BlackJack", 1280, 720);
 		// creating variables and arrays
-		int intCount;
+		int intCount = 0;
 		// creating arrays for player, dealer and deck
 		int intDeck[][];
 		int intPlayer[][];
@@ -16,6 +16,10 @@ public class hanselCPT{
 		intPlayer = new int[5][2];
 		int intPTotal = 0;
 		int intDTotal = 0;
+		// variables for leaderboard
+		int intLength = 0;
+		String strScore [][];
+		String strTemp[];
 		// creating variables for the the bet and balance
 		boolean blnName = false;
 		int intBet = 0;
@@ -33,8 +37,6 @@ public class hanselCPT{
 		int intNum;
 		// creating a variable for card count
 		int intCardCount = 0;
-		// creating a variable to print recents.txt
-		String strScore;
 		// creating variables to go to different screens and what the user does 
 		String strScreen = "menu";
 		String strAction;
@@ -70,13 +72,40 @@ public class hanselCPT{
 				// Recent - read and print scores from winners.txt
 				else if (chrAction == 'v'){
 					con.clear();
+					strTemp = new String[1];
 					// read winners.txt and output it
 					TextInputFile scores = new TextInputFile("winners.txt");
 					while(scores.eof() == false){
-						strScore = scores.readLine();
-						con.println(strScore);
+						strTemp[0] = scores.readLine();
+						intLength++;
 					}
 					scores.close();
+					strScore = new String[intLength/2][2];
+					TextInputFile score = new TextInputFile("winners.txt");
+					while(score.eof() ==  false){
+						strScore[intCount][0] = score.readLine();
+						strScore[intCount][1] = score.readLine();
+						intCount++;
+					}
+					for (intRow2 = 0; intRow2 < intLength / 2 - 1; intRow2++){
+						// for the for loop to run until all item are sorted
+						for (intRow = 0; intRow < intLength / 2 - 1 - intRow2; intRow++){
+							if(Integer.parseInt(strScore[intRow][1]) > Integer.parseInt(strScore[intRow+1][1])){
+								// take the left item 
+								strTemp = strScore[intRow];
+								// move right item to the left 
+								strScore[intRow] = strScore[intRow+1];
+								// put temp values into right item
+								strScore[intRow+1] = strTemp;
+							}
+						}
+					}
+				for (intRow = 0; intRow < intCount; intRow++){
+					con.println(strScore[intRow][0] + " | " + strScore[intRow][1]);
+				}
+					
+					
+					
 					// get input to navigate to the menu or table
 					con.println("Play | Menu");
 					chrAction = con.getChar();
@@ -142,6 +171,10 @@ public class hanselCPT{
 				con.repaint();
 				// set a delay to make it enjoyable to see
 				con.sleep(10);
+				intCount++;
+				if (intCount >= 50000){
+					con.closeConsole();
+				}
 			}
 			
 			// Table screen
