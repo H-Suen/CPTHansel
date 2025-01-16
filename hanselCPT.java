@@ -54,7 +54,7 @@ public class hanselCPT{
 		
 		// while loop to constantly run this program
 		while(true){
-			// main menu
+			// Main menu - the menu that the user can use to navigate 
 			while (strScreen.equals("menu")){
 				con.clear();
 				con.println("Welcome to Blackjack!");
@@ -75,18 +75,24 @@ public class hanselCPT{
 					strTemp = new String[1];
 					// read winners.txt and output it
 					TextInputFile scores = new TextInputFile("winners.txt");
+					// getting the length of the file
 					while(scores.eof() == false){
 						strTemp[0] = scores.readLine();
 						intLength++;
 					}
+					// close the file for rereading
 					scores.close();
+					// setting strScore to the length of the file divided by two (one for name, one for score)
 					strScore = new String[intLength/2][2];
+					// open the file again to read
 					TextInputFile score = new TextInputFile("winners.txt");
+					// read the file to assign strScore the data
 					while(score.eof() ==  false){
 						strScore[intCount][0] = score.readLine();
 						strScore[intCount][1] = score.readLine();
 						intCount++;
 					}
+					
 					for (intRow2 = 0; intRow2 < intLength / 2 - 1; intRow2++){
 						// for the for loop to run until all item are sorted
 						for (intRow = 0; intRow < intLength / 2 - 1 - intRow2; intRow++){
@@ -136,7 +142,7 @@ public class hanselCPT{
 					con.println("Main menu");
 					chrAction = con.getChar();
 				}
-				// secret menu that prints a joke
+				// Secret - secret menu that prints a joke
 				else if (chrAction == 's'){
 					con.clear();
 					con.println("Which company NEVER loses at blackjack?");
@@ -153,7 +159,7 @@ public class hanselCPT{
 				}
 			}
 			
-			// Quit screen
+			// Quit screen - display a dvd image that moves around and quits the code
 			while (strScreen.equalsIgnoreCase("quit")){
 				// draw the image to the console
 				con.drawImage(imgDVD, intX, intY);
@@ -177,7 +183,7 @@ public class hanselCPT{
 				}
 			}
 			
-			// Table screen
+			// Table screen - sends the user to the table to play
 			while (strScreen.equals("table")){
 				// resetting the player and dealer total
 				intPTotal = 0;
@@ -345,7 +351,7 @@ public class hanselCPT{
 						}
 						// else give them a card
 						else{
-						strScreen = "hit";	
+							strScreen = "hit";	
 						}
 					}
 				}	
@@ -386,11 +392,10 @@ public class hanselCPT{
 				// changing screen to dealer
 				strScreen = "dealer";
 			}
-			
+			intCount = 2;
 			// hit screen (gives them another card)
 			while (strScreen.equalsIgnoreCase("hit")){
 				con.clear();
-				intCount = 2;
 				intPlayer[intCount][0] = intDeck[intCardCount][0];
 				intPlayer[intCount][1] = intDeck[intCardCount][1];
 				// converting royals and aces to the correct value
