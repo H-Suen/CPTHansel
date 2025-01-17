@@ -544,7 +544,7 @@ public class hanselCPT{
 				if (intBalance <= 0){
 					con.println("You have run out of money");
 					con.println("Return to main menu");
-					strAction = con.readLine();
+					chrAction = con.getChar();
 					// write their names in winners.txt
 					TextOutputFile loser = new TextOutputFile("winners.txt", true);
 					loser.println(strName);
