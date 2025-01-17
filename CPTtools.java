@@ -42,7 +42,7 @@ public class CPTtools{
 	}
 	public static int dhand(int intNum, int intSuit){
 		int intReturn = 0;
-		// opening a txt file to store player's hand 
+		// opening a txt file to store dealers's hand 
 		TextOutputFile DealerHand = new TextOutputFile("DealHand.txt", true);		
 		// Translating and printing numbers
 		// translating 11-13 to royals
