@@ -335,10 +335,10 @@ public class hanselCPT{
 						con.print("Would you like to: ");
 						// if they have the correct total they can double down 
 						if(intPTotal <= 11 && intPTotal >= 9){
-							con.print("Double Down, ");
+							con.print("(d)ouble Down, ");
 						}
 						// if they want to stand or hit
-						con.println("Stand, or Hit");
+						con.println("(s)tand, or (h)it");
 						chrAction = con.getChar();
 						// set the screen to dealer if they stand
 						if (chrAction == 's'){
@@ -359,6 +359,15 @@ public class hanselCPT{
 			// double down screen
 			while (strScreen.equalsIgnoreCase("double down")){
 				con.clear();
+				while (true){
+					con.println("How much would you like to add to your bet?");
+					intNum = con.readInt();
+					if (intNum <= intBalance){
+						intBalance -= intNum;
+						intBet += intNum;
+						break;
+					}
+				}
 				// displaying player's hand
 				con.println("Player 1's hand");
 				// dealing the player the card
