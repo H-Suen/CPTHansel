@@ -6,7 +6,7 @@ public class hanselCPT{
 	public static void main(String[] args){
 		Console con = new Console("BlackJack", 1280, 720);
 		// creating variables and arrays
-		int intCount = 0;
+		int intCount = 0;		
 		// creating arrays for player, dealer and deck
 		int intDeck[][];
 		int intPlayer[][];
@@ -46,14 +46,16 @@ public class hanselCPT{
 		String strDealerHand;
 		int intReturn;
 		// cereatng variables to draw an image
-		int intX = 0;
-		int intY = 0;
+		int intX = (int)(Math.random()*((1005-1) + 1));
+		int intY = (int)(Math.random()*((588-1) + 1));
 		int intXVel = 2;
 		int intYVel = 2;
 		BufferedImage imgDVD = con.loadImage("DVD.png");
 		
 		// while loop to constantly run this program
 		while(true){
+			// set the bg colour to green
+			con.setBackgroundColor(new Color(29, 50, 23));
 			// Main menu - the menu that the user can use to navigate 
 			while (strScreen.equals("menu")){
 				con.clear();
@@ -106,9 +108,9 @@ public class hanselCPT{
 							}
 						}
 					}
-				for (intRow = 0; intRow < intCount; intRow++){
-					con.println(strScore[intRow][0] + " | " + strScore[intRow][1]);
-				}
+					for (intRow = 0; intRow < intCount; intRow++){
+						con.println(strScore[intRow][0] + " | " + strScore[intRow][1]);
+					}
 					
 					
 					
@@ -119,6 +121,8 @@ public class hanselCPT{
 				// Quit - Go to dvd screen
 				else if (chrAction == 'q'){
 					con.clear();
+					// set the bg to black for dvd screen
+					con.setBackgroundColor(new Color(0, 0, 0));
 					strScreen = "quit";
 				}
 				// Help - Print out rules of the game
@@ -167,18 +171,18 @@ public class hanselCPT{
 				intX += intXVel;
 				intY += intYVel;
 				// if it exceeds the border turn it back
-				if (intX >= 1025 || intX <= 0){
+				if (intX >= 1005 || intX <= 0){
 					intXVel *= -1;
 				}
-				if (intY >= 465 || intY <= 0){
+				if (intY >= 588 || intY <= 0){
 					intYVel *= -1;
 				}
 				// repaint the image
 				con.repaint();
 				// set a delay to make it enjoyable to see
 				con.sleep(10);
-				intCount++;
-				if (intCount >= 50000){
+				chrAction = con.currentChar();
+				if (chrAction == ' '){
 					con.closeConsole();
 				}
 			}
@@ -335,10 +339,10 @@ public class hanselCPT{
 						con.print("Would you like to: ");
 						// if they have the correct total they can double down 
 						if(intPTotal <= 11 && intPTotal >= 9){
-							con.print("(d)ouble Down, ");
+							con.print("Double Down, ");
 						}
 						// if they want to stand or hit
-						con.println("(s)tand, or (h)it");
+						con.println("Stand, or Hit");
 						chrAction = con.getChar();
 						// set the screen to dealer if they stand
 						if (chrAction == 's'){
@@ -359,15 +363,6 @@ public class hanselCPT{
 			// double down screen
 			while (strScreen.equalsIgnoreCase("double down")){
 				con.clear();
-				while (true){
-					con.println("How much would you like to add to your bet?");
-					intNum = con.readInt();
-					if (intNum <= intBalance){
-						intBalance -= intNum;
-						intBet += intNum;
-						break;
-					}
-				}
 				// displaying player's hand
 				con.println("Player 1's hand");
 				// dealing the player the card
@@ -553,7 +548,7 @@ public class hanselCPT{
 				if (intBalance <= 0){
 					con.println("You have run out of money");
 					con.println("Return to main menu");
-					chrAction = con.getChar();
+					strAction = con.readLine();
 					// write their names in winners.txt
 					TextOutputFile loser = new TextOutputFile("winners.txt", true);
 					loser.println(strName);
