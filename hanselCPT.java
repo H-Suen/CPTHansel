@@ -1,3 +1,12 @@
+/*
+-------------------------------------------------------------------------
+Name:         Blackjack
+Purpose:      Allow the user to play blackjack online
+Author:       Suen H.
+Created:      15/12/2024
+-------------------------------------------------------------------------
+*/
+// import all the things needed for images and main programs
 import arc.*;
 import java.awt.*;
 import java.awt.image.*;
@@ -112,10 +121,8 @@ public class hanselCPT{
 						con.println(strScore[intRow][0] + " | " + strScore[intRow][1]);
 					}
 					
-					
-					
 					// get input to navigate to the menu or table
-					con.println("Play | Menu");
+					con.println("Back to main (m)enu");
 					chrAction = con.getChar();
 				}
 				// Quit - Go to dvd screen
@@ -143,7 +150,7 @@ public class hanselCPT{
 					con.println("If the dealer bust, you WIN!");
 					con.println("If neither you nor the dealer busts, the person with the highest hand wins");
 					con.println("");
-					con.println("Main menu");
+					con.println("Back to main (m)enu");
 					chrAction = con.getChar();
 				}
 				// Secret - secret menu that prints a joke
@@ -181,6 +188,7 @@ public class hanselCPT{
 				con.repaint();
 				// set a delay to make it enjoyable to see
 				con.sleep(10);
+				// if they press space then quit the program
 				chrAction = con.currentChar();
 				if (chrAction == ' '){
 					con.closeConsole();
@@ -438,17 +446,20 @@ public class hanselCPT{
 				con.println(strDealerHand);
 				DHand.close();		
 				con.println("");
-				// telling user if they busted, got 21 or they want to hit again
+				// telling user if they busted
 				if (intPTotal > 21){
 					con.println("You busted!");
 					strScreen = "end";
 				}
+				// if they got 21 automatically send the user to dealer
 				else if (intPTotal == 21){
 					strScreen = "dealer";
 				}
+				// if they have less than 21 ask for them to hit or stand
 				else{
 					con.println("Would you like to Hit or Stand?");
 					chrAction = con.getChar();
+					// if they stand send them make it the dealer's turn 
 					if (chrAction == 's'){
 						strScreen = "dealer";
 					}
@@ -547,8 +558,8 @@ public class hanselCPT{
 				// if they run out of money
 				if (intBalance <= 0){
 					con.println("You have run out of money");
-					con.println("Return to main menu");
-					strAction = con.readLine();
+					con.println("(r)eturn to main menu");
+					chrAction = con.getChar();
 					// write their names in winners.txt
 					TextOutputFile loser = new TextOutputFile("winners.txt", true);
 					loser.println(strName);
